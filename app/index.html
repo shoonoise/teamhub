@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Team Hub</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../bower_components/octicons/octicons/octicons.css">
+</head>
+
+<body ng-app="teamHubApp">
+<div ng-controller="RepoCtrl">
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="media">
+                <img class="img-circle navbar-text"  style="height: 40px;" ng-src="{{user_avatar}}">
+          </div>
+</nav>
+
+    <div class="container">
+        <div class="col-md-2"></div>
+        <div class="col-md-7">
+            <table class="table table-hover">
+
+                <thead>
+                <tr>
+                    <th><span class="octicon octicon-repo"></span> Repository</th>
+                    <th> Opened Issues</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="repo in repos | filter:query | orderBy:'-open_issues'">
+                <tr>
+                    <td>
+                        <a ng-href="{{repo.html_url}}">{{repo.full_name}}</a>
+                        <span ng-if="repo.pulls.length > 0" class="badge pull-right alert-info">
+                        <span class="octicon octicon-git-pull-request"></span> {{repo.pulls.length}}
+                        </span>
+                    </td>
+                    <td>
+                        <span ng-if="repo.open_issues > 0">
+                        <span class="octicon octicon-issue-opened"></span> {{repo.open_issues}}
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-route/angular-route.js"></script>
+<script src="js/app.js"></script>
+<!-- <script src="js/services.js"></script> -->
+<script src="js/controllers.js"></script>
+<!-- <script src="js/filters.js"></script>
+<script src="js/directives.js"></script> -->
+<script src="../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+<script src="../node_modules/underscore/underscore.js"></script>
+<script src="../node_modules/github-api/github.js"></script>
+<script src="../bower_components/oauth-js/dist/oauth.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "teamHub",
+  "description": "Show info about your repos",
+  "version": "0.0.1",
+  "homepage": "https://github.com/shoonoise/team-hub",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-loader": "1.2.x",
+    "angular-mocks": "~1.2.x",
+    "bootstrap": "*",
+    "octicons": "*"
+  }
+}
