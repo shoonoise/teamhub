@@ -47,6 +47,7 @@ teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
         $scope.user_signed = true;
     };
 
+
     function showRepos(event, gitHubToken) {
 
         var github = new Github({
@@ -70,46 +71,48 @@ teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
         });
 
         user.orgs(function (err, orgs) {
-            if (orgs) {
+            if (err) {
+                console.log(err);
+            } else {
                 orgs.map(addOrgRepos);
-            }
+            };
         });
 
-    };
+        function pushToScope(repo) {
+            $scope.repos.push(repo);
+            $scope.$apply();
+        }
 
-    function pushToScope(repo) {
-        $scope.repos.push(repo);
-        $scope.$digest();
-    }
+        function addPullsInfo(repo) {
+            if (repo.open_issues > 0) {
+                github.getRepo(repo.owner.login, repo.name).listPulls('open', function (err, pulls) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    else {
+                        repo.pulls = pulls;
+                        pushToScope(repo)
+                    }
+                })
+            }
+            else {
+                repo.pulls = [];
+                pushToScope(repo)
+            }
+        }
 
-    function addPullsInfo(repo) {
-        if (repo.open_issues > 0) {
-            github.getRepo(repo.owner.login, repo.name).listPulls('open', function (err, pulls) {
+        function addOrgRepos(org) {
+            user.orgRepos(org.login, function (err, repos) {
                 if (err) {
                     console.log(err);
                     return;
+                } else {
+                    repos.map(addPullsInfo)
                 }
-                else {
-                    repo.pulls = pulls;
-                    pushToScope(repo)
-                }
-            })
+            });
         }
-        else {
-            repo.pulls = [];
-            pushToScope(repo)
-        }
-    }
 
-    function addOrgRepos(org) {
-        user.orgRepos(org.login, function (err, repos) {
-            if (err) {
-                console.log(err);
-                return;
-            } else {
-                repos.map(addPullsInfo)
-            }
-        });
-    }
+    };
 
 });
