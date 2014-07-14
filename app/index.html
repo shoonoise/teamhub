@@ -10,17 +10,29 @@
 </head>
 
 <body ng-app="teamHubApp">
+
 <div ng-controller="RepoCtrl">
 
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="media">
-                <img class="img-circle navbar-text"  style="height: 40px;" ng-src="{{user_avatar}}">
-          </div>
-</nav>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div>
+            <img class="img-circle navbar-text"  style="height: 40px;" ng-src="{{user_avatar}}">
+        </div>
+
+        <div class="container" ng-controller="AuthCtrl">
+            <div ng-show="user_signed" class="pull-right">
+                <p class="navbar-text"> Signed in as <b>{{user_name}}</b></p>
+                <a class="btn btn-default navbar-btn" ng-click="logOut()">Logout</a>
+            </div>
+
+            <div ng-hide="user_signed" class="pull-right">
+                <a class="btn btn-default navbar-btn" ng-click="signIn()">Sign in</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
-        <div class="col-md-2"></div>
-        <div class="col-md-7">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
             <table class="table table-hover">
 
                 <thead>
@@ -47,7 +59,7 @@
 
             </table>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
     </div>
 </div>
 <!-- In production use:
