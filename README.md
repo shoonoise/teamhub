@@ -12,4 +12,4 @@ ToDo:
 + Show links to PRs/Issues
 + Projects support
 + Partial update
-+ Save oath token in localstorage(is it secure?)
++ ~~Save oath token in localstorage(is it secure?)~~

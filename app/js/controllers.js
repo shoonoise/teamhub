@@ -8,7 +8,6 @@ var teamHubControllers = angular.module('teamHubControllers', []);
 teamHubControllers.controller("AuthCtrl", function($scope, $location) {
 
     if ($location.path() == '/oauth_callback') {
-
         OAuth.callback(function(err, result) {
             if (err) {
                 console.log(err);
@@ -17,6 +16,7 @@ teamHubControllers.controller("AuthCtrl", function($scope, $location) {
                 $scope.user_signed = true;
                 $scope.$emit('SignIn', result.access_token);
                 $location.path('/') ;
+                store.set("gitHubToken", result.access_token);
             }
         });
     };
@@ -29,8 +29,8 @@ teamHubControllers.controller("AuthCtrl", function($scope, $location) {
     $scope.logOut = function () {
        $scope.user_signed = false;
        $scope.gitHubToken = '';
+       store.set("gitHubToken", '');
        $scope.repos = [];
-    //    $scope.$apply();
     };
 
 });
@@ -39,6 +39,13 @@ teamHubControllers.controller("AuthCtrl", function($scope, $location) {
 teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
     $scope.repos = [];
     $scope.$on('SignIn', showRepos);
+
+    var storedToken = store.get("gitHubToken");
+
+    if (storedToken) {
+        showRepos('', storedToken);
+        $scope.user_signed = true;
+    };
 
     function showRepos(event, gitHubToken) {
 
@@ -72,7 +79,7 @@ teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
 
     function pushToScope(repo) {
         $scope.repos.push(repo);
-        $scope.$apply();
+        $scope.$digest();
     }
 
     function addPullsInfo(repo) {
