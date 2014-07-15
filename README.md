@@ -9,7 +9,7 @@ ToDo:
 ---
 
 + Auth error page
-+ Show links to PRs/Issues
++ ~~Show links to PRs/Issues~~
 + Projects support
 + Partial update
 + ~~Save oath token in localstorage(is it secure?)~~
