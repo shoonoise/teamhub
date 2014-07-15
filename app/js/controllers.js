@@ -92,7 +92,8 @@ teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
                     }
                     else {
                         repo.pulls = pulls;
-                        pushToScope(repo)
+                        pushToScope(repo);
+                        console.log(pulls);
                     }
                 })
             }
