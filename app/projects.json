@@ -1,0 +1,10 @@
+[
+    {"name": "gns",
+        "desc": "Distributed events processor",
+        "repos": ["gns2", "obedient-gns", "gns", "raava",
+                  "gns-helpers", "gns-rules-checker"]},
+    {"name": "dominator",
+        "desc": "Distributed application deployment using Docker",
+        "repos": ["dominator", "obedient-gns", "obedient-elk", "obedient-zookeeper",
+                  "obedient-elasticsearch", "obedient-gns"]}
+]

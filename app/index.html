@@ -14,13 +14,13 @@
 <div ng-controller="RepoCtrl">
 
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
-        <div>
-            <img class="img-circle navbar-text"  style="height: 40px;" ng-src="{{user_avatar}}">
-        </div>
-
+        <a class="navbar-brand" href="#">Team Hub Dasboard</a>
         <div class="container" ng-controller="AuthCtrl">
+
+            <img class="img-circle navbar-text"  style="height: 40px;" ng-src="{{user_avatar}}">
+            <p class="navbar-text"> Signed in as <b>{{user_name}}</b></p>
+
             <div ng-show="user_signed" class="pull-right">
-                <p class="navbar-text"> Signed in as <b>{{user_name}}</b></p>
                 <a class="btn btn-default navbar-btn" ng-click="logOut()">Logout</a>
             </div>
 
@@ -31,20 +31,41 @@
     </nav>
 
     <div class="container">
-        <div class="col-md-12">
+    <div class="row">
+        <div class="col-md-5">
+
+            <div class="list-group" ng-init="selectedTab = 'all'">
+                <a href class="list-group-item"
+                ng-click="selected_proj=setViewedProject('')"
+                ng-class="{'active':isSelected === ''}">
+                    Show All
+                </a>
+                <a href class="list-group-item" ng-repeat="project in projects"
+                   ng-click="setViewedProject(project.name)"
+                   ng-class="{'active':isSelected === project.name}">
+                    <h4 class="list-group-item-heading"> {{project.name}} </h4>
+                    <p> {{project.desc}} </p>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-7">
             <ul class="list-group">
-              <li class="list-group-item" ng-repeat="repo in repos | orderBy:'-open_issues' | orderBy: '-pulls.length'"
+              <li class="list-group-item"
+                  ng-repeat="repo in repos | project:selected_project | orderBy:'-open_issues' | orderBy: '-pulls.length'"
                   ng-click="showDetails = ! showDetails">
                   <h4 class="list-group-item-heading">
                     {{repo.full_name}}
-                    <span ng-if="repo.open_issues > 0" class="badge pull-right">
-                        <span ng-if="repo.pulls.length > 0">
-                            <span class="octicon octicon-git-pull-request"></span>
-                            {{repo.pulls.length}}
+                    <a href>
+                        <span ng-if="repo.open_issues > 0" class="badge pull-right">
+                            <span ng-if="repo.pulls.length > 0">
+                                <span class="octicon octicon-git-pull-request"></span>
+                                {{repo.pulls.length}}
+                            </span>
+                            <span class="octicon octicon-issue-opened"></span>
+                            {{repo.open_issues}}
                         </span>
-                        <span class="octicon octicon-issue-opened"></span>
-                        {{repo.open_issues}}
-                    </span>
+                    </a>
                   </h4>
 
                   <div ng-show="showDetails" class="panel-body">
@@ -57,6 +78,7 @@
               </li>
             </ul>
         </div>
+    </div>
     </div>
 
 <!-- In production use:
@@ -75,6 +97,8 @@
 
 <script src="js/app.js"></script>
 <script src="js/controllers.js"></script>
+<script src="js/filters.js"></script>
+
 
 </body>
 </html>

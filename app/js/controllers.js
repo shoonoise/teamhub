@@ -36,9 +36,22 @@ teamHubControllers.controller("AuthCtrl", function($scope, $location) {
 });
 
 
-teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
+teamHubControllers.controller('RepoCtrl', function ($scope, $location, $http) {
     $scope.repos = [];
     $scope.$on('SignIn', showRepos);
+    $scope.selected_project = '';
+    $scope.isSelected = '';
+
+    $http.get('projects.json')
+       .then(function(res){
+          $scope.projects = res.data;
+        });
+
+
+    $scope.setViewedProject = function(project_name) {
+        $scope.selected_project = project_name;
+        $scope.isSelected = project_name;
+    }
 
     var storedToken = store.get("gitHubToken");
 
@@ -85,15 +98,16 @@ teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
 
         function addPullsInfo(repo) {
             if (repo.open_issues > 0) {
-                github.getRepo(repo.owner.login, repo.name).listPulls('open', function (err, pulls) {
+                github.getRepo(repo.owner.login, repo.name)
+                .listPulls('open', function (err, pulls) {
                     if (err) {
                         console.log(err);
                         return;
                     }
                     else {
                         repo.pulls = pulls;
+                        repo.proj = getProjects(repo.name)
                         pushToScope(repo);
-                        console.log(pulls);
                     }
                 })
             }
@@ -113,6 +127,14 @@ teamHubControllers.controller('RepoCtrl', function ($scope, $location) {
                 }
             });
         }
+
+        function getProjects(repoName){
+            return $scope.projects.filter(function(project) {
+                    return project.repos.indexOf(repoName) > -1;
+                    }).map(function(item) {
+                        return item.name
+                        });
+        };
 
     };
 
